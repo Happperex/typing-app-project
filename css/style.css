@@ -1,0 +1,279 @@
+/* ============================================
+   Typo Disk — style.css
+   Edit this file to change colours & layout
+   ============================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #1a1a2e;
+  color: #eee;
+  font-family: 'Courier New', monospace;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0 20px 40px;
+}
+
+/* ── Top Nav Bar ── */
+#top-bar {
+  width: 100%; max-width: 700px;
+  display: flex; justify-content: flex-end; align-items: center;
+  gap: 8px; padding: 12px 0 8px;
+}
+#auth-area, #user-area {
+  display: flex; align-items: center; gap: 8px;
+}
+.user-name {
+  color: #4ecca3; font-size: 0.85rem; letter-spacing: 1px;
+  margin-right: 4px;
+}
+.user-name::before { content: "👤 "; }
+
+/* ── Buttons ── */
+.btn {
+  padding: 8px 20px; border: none; border-radius: 8px;
+  font-family: 'Courier New', monospace; font-size: 0.88rem;
+  cursor: pointer; letter-spacing: 1px; transition: opacity 0.2s, transform 0.1s;
+}
+.btn:hover  { opacity: 0.85; }
+.btn:active { transform: scale(0.97); }
+.btn-red    { background: #e94560; color: #fff; }
+.btn-teal   { background: #4ecca3; color: #1a1a2e; }
+.btn-ghost  {
+  background: transparent; color: #888;
+  border: 1px solid #0f3460;
+}
+.btn-ghost:hover { color: #eee; border-color: #eee; }
+.btn-full { width: 100%; padding: 11px; font-size: 0.95rem; margin-top: 4px; }
+
+/* ── Header ── */
+header { text-align: center; margin-bottom: 24px; margin-top: 4px; }
+header h1 {
+  font-size: 2.4rem; color: #e94560;
+  letter-spacing: 4px; text-transform: uppercase;
+}
+header p { color: #888; font-size: 0.85rem; margin-top: 4px; }
+
+/* ── Stats ── */
+#stats { display: flex; gap: 40px; margin-bottom: 16px; }
+.stat { text-align: center; }
+.stat-value { font-size: 2rem; font-weight: bold; color: #e94560; }
+.stat-label { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ── Level Badge ── */
+#level-badge {
+  background: #16213e; border: 1px solid #e94560; color: #e94560;
+  padding: 4px 16px; border-radius: 20px; font-size: 0.8rem;
+  letter-spacing: 2px; margin-bottom: 16px;
+}
+
+/* ── Text Display ── */
+#text-display {
+  background: #16213e; border: 1px solid #0f3460; border-radius: 10px;
+  padding: 22px; width: 100%; max-width: 700px; font-size: 1.15rem;
+  line-height: 2; margin-bottom: 14px; min-height: 85px; letter-spacing: 0.5px;
+}
+.char         { color: #555; }
+.char.correct { color: #4ecca3; }
+.char.wrong   { color: #e94560; background: #3a0a14; border-radius: 2px; }
+.char.cursor  { border-left: 2px solid #e94560; }
+
+/* ── Typing Input ── */
+#input-area { width: 100%; max-width: 700px; margin-bottom: 14px; }
+#typing-input {
+  width: 100%; padding: 11px 16px; background: #16213e;
+  border: 1px solid #0f3460; border-radius: 8px; color: #eee;
+  font-family: 'Courier New', monospace; font-size: 1rem;
+  outline: none; transition: border-color 0.2s;
+}
+#typing-input:focus    { border-color: #e94560; }
+#typing-input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Action Row (Start + Share) ── */
+#action-row {
+  display: flex; gap: 10px; margin-bottom: 18px;
+}
+#action-row .btn { padding: 10px 28px; font-size: 0.95rem; }
+
+/* ── Result Box ── */
+#result {
+  display: none; background: #16213e; border: 1px solid #4ecca3;
+  border-radius: 10px; padding: 20px 30px; text-align: center;
+  margin-bottom: 20px; width: 100%; max-width: 700px;
+}
+#result h2   { color: #4ecca3; margin-bottom: 6px; }
+#result p    { color: #aaa; font-size: 0.88rem; }
+#result .big { font-size: 2.4rem; color: #e94560; font-weight: bold; }
+
+/* ── Custom Lessons Panel ── */
+#custom-section { width: 100%; max-width: 700px; margin-bottom: 20px; }
+
+#custom-toggle {
+  background: none; border: 1px solid #0f3460; color: #888;
+  width: 100%; padding: 9px; border-radius: 8px; cursor: pointer;
+  font-family: 'Courier New', monospace; font-size: 0.82rem;
+  letter-spacing: 1px; text-transform: uppercase;
+  transition: border-color 0.2s, color 0.2s;
+}
+#custom-toggle:hover { border-color: #e94560; color: #e94560; }
+
+#custom-panel {
+  display: none; margin-top: 10px; background: #16213e;
+  border: 1px solid #0f3460; border-radius: 10px; padding: 18px;
+}
+#custom-panel h3 {
+  font-size: 0.78rem; color: #888; text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 14px;
+}
+#drop-zone {
+  border: 2px dashed #0f3460; border-radius: 8px; padding: 26px;
+  text-align: center; color: #555; font-size: 0.88rem;
+  cursor: pointer; transition: border-color 0.2s, color 0.2s; margin-bottom: 12px;
+}
+#drop-zone:hover, #drop-zone.drag-over { border-color: #e94560; color: #e94560; }
+#drop-zone span { display: block; font-size: 1.6rem; margin-bottom: 6px; }
+
+#lesson-name-input {
+  width: 100%; padding: 9px 12px; background: #0f3460;
+  border: 1px solid #1a4a80; border-radius: 6px; color: #eee;
+  font-family: 'Courier New', monospace; font-size: 0.9rem;
+  outline: none; margin-bottom: 10px; transition: border-color 0.2s;
+}
+#lesson-name-input:focus { border-color: #e94560; }
+
+#file-preview {
+  background: #0f3460; border-radius: 6px; padding: 10px 14px;
+  font-size: 0.78rem; color: #aaa; margin-bottom: 12px; display: none;
+  max-height: 70px; overflow: hidden; position: relative; line-height: 1.6;
+}
+#file-preview::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 28px; background: linear-gradient(transparent, #0f3460);
+}
+#add-lesson-btn { width: 100%; }
+
+#lessons-list { margin-top: 16px; }
+#lessons-list h4 {
+  font-size: 0.7rem; color: #555; text-transform: uppercase;
+  letter-spacing: 1px; margin-bottom: 8px;
+}
+.lesson-item {
+  display: flex; align-items: center; background: #0f3460;
+  border-radius: 6px; padding: 8px 12px; margin-bottom: 6px; font-size: 0.85rem;
+}
+.lesson-item .lesson-name { color: #eee; flex: 1; }
+.lesson-item .lesson-tag  { font-size: 0.65rem; color: #666; letter-spacing: 1px; margin: 0 10px; }
+.lesson-item .use-btn {
+  background: #e94560; color: #fff; border: none; border-radius: 5px;
+  padding: 4px 12px; font-size: 0.75rem; cursor: pointer;
+  font-family: 'Courier New', monospace; letter-spacing: 1px;
+}
+.lesson-item .use-btn:hover { opacity: 0.85; }
+.lesson-item .del-btn {
+  background: none; border: none; color: #555; cursor: pointer;
+  font-size: 1rem; margin-left: 8px; padding: 0 4px; transition: color 0.2s;
+}
+.lesson-item .del-btn:hover { color: #e94560; }
+.no-lessons { color: #555; font-size: 0.82rem; text-align: center; padding: 6px 0; }
+
+/* ── Keyboard ── */
+#keyboard {
+  width: 100%; max-width: 700px; background: #16213e;
+  border: 1px solid #0f3460; border-radius: 10px; padding: 14px;
+  user-select: none;
+}
+#keyboard h3 {
+  font-size: 0.72rem; color: #555; text-transform: uppercase;
+  letter-spacing: 2px; margin-bottom: 10px; text-align: center;
+}
+.kb-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 5px; }
+.key {
+  background: #0f3460; color: #aaa; border: 1px solid #1a4a80;
+  border-radius: 5px; padding: 7px 0; width: 42px; text-align: center;
+  font-size: 0.75rem; font-family: 'Courier New', monospace;
+  transition: background 0.1s, color 0.1s;
+}
+.key.w15  { width: 62px; }
+.key.w17  { width: 70px; }
+.key.w20  { width: 84px; }
+.key.wsp  { width: 250px; }
+.key.active-ok  { background: #4ecca3; color: #1a1a2e; border-color: #4ecca3; }
+.key.active-err { background: #e94560; color: #fff;    border-color: #e94560; }
+
+/* ══════════════════════════════════════
+   MODALS
+══════════════════════════════════════ */
+.modal-backdrop {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); z-index: 100;
+  justify-content: center; align-items: center;
+}
+.modal-box {
+  background: #16213e; border: 1px solid #0f3460; border-radius: 14px;
+  padding: 32px 28px; width: 100%; max-width: 400px; position: relative;
+}
+.modal-wide { max-width: 600px; }
+.modal-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: none; color: #555; font-size: 1.1rem;
+  cursor: pointer; transition: color 0.2s;
+}
+.modal-close:hover { color: #e94560; }
+.modal-title {
+  font-size: 1.4rem; color: #e94560; text-align: center;
+  letter-spacing: 3px; margin-bottom: 20px;
+}
+
+/* Modal Tabs */
+.modal-tabs {
+  display: flex; border-bottom: 1px solid #0f3460; margin-bottom: 20px;
+}
+.modal-tab {
+  flex: 1; background: none; border: none; color: #555;
+  padding: 8px; cursor: pointer; font-family: 'Courier New', monospace;
+  font-size: 0.85rem; letter-spacing: 1px; border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.modal-tab.active { color: #e94560; border-bottom-color: #e94560; }
+.modal-tab:hover  { color: #eee; }
+
+/* Modal Inputs */
+.modal-input {
+  width: 100%; padding: 10px 14px; background: #0f3460;
+  border: 1px solid #1a4a80; border-radius: 7px; color: #eee;
+  font-family: 'Courier New', monospace; font-size: 0.92rem;
+  outline: none; margin-bottom: 10px; transition: border-color 0.2s;
+}
+.modal-input:focus { border-color: #e94560; }
+
+.auth-error { color: #e94560; font-size: 0.78rem; min-height: 18px; margin-bottom: 6px; }
+.auth-switch { text-align: center; color: #555; font-size: 0.8rem; margin-top: 12px; }
+.auth-switch a { color: #4ecca3; cursor: pointer; }
+.auth-switch a:hover { text-decoration: underline; }
+
+/* ── Leaderboard Table ── */
+.lb-table-wrap {
+  max-height: 360px; overflow-y: auto; border-radius: 8px;
+  border: 1px solid #0f3460;
+}
+.lb-table {
+  width: 100%; border-collapse: collapse; font-size: 0.88rem;
+}
+.lb-table th {
+  background: #0f3460; color: #888; font-weight: normal;
+  text-transform: uppercase; font-size: 0.7rem; letter-spacing: 1px;
+  padding: 10px 12px; position: sticky; top: 0;
+}
+.lb-table td {
+  padding: 10px 12px; border-bottom: 1px solid #0f3460; color: #ccc;
+}
+.lb-table tr:last-child td { border-bottom: none; }
+.lb-table tr:hover td     { background: #1a2a4a; }
+.lb-table tr.my-row td    { background: #0a2a1a; }
+.you-tag {
+  background: #4ecca3; color: #1a1a2e; font-size: 0.62rem;
+  padding: 1px 5px; border-radius: 4px; letter-spacing: 1px;
+  vertical-align: middle; margin-left: 4px;
+}

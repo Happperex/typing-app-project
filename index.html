@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Typo Disk</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     AUTH MODAL (Login / Register)
+══════════════════════════════════════ -->
+<div id="auth-modal" class="modal-backdrop">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeAuthModal()">&#10005;</button>
+    <h2 class="modal-title">Typo Disk</h2>
+
+    <!-- Tabs -->
+    <div class="modal-tabs">
+      <button id="tab-login"    class="modal-tab active" onclick="switchTab('login')">Login</button>
+      <button id="tab-register" class="modal-tab"        onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form">
+      <input class="modal-input" id="login-username" type="text"     placeholder="Username"
+             onkeydown="authKeydown(event, submitLogin)" />
+      <input class="modal-input" id="login-password" type="password" placeholder="Password"
+             onkeydown="authKeydown(event, submitLogin)" />
+      <p class="auth-error" id="login-error"></p>
+      <button class="btn btn-full" onclick="submitLogin()">Login</button>
+      <p class="auth-switch">No account? <a onclick="switchTab('register')">Register</a></p>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form" style="display:none">
+      <input class="modal-input" id="reg-username"  type="text"     placeholder="Username" />
+      <input class="modal-input" id="reg-password"  type="password" placeholder="Password" />
+      <input class="modal-input" id="reg-password2" type="password" placeholder="Confirm password"
+             onkeydown="authKeydown(event, submitRegister)" />
+      <p class="auth-error" id="register-error"></p>
+      <button class="btn btn-full" onclick="submitRegister()">Create Account</button>
+      <p class="auth-switch">Have an account? <a onclick="switchTab('login')">Login</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     LEADERBOARD MODAL
+══════════════════════════════════════ -->
+<div id="lb-modal" class="modal-backdrop">
+  <div class="modal-box modal-wide">
+    <button class="modal-close" onclick="closeLeaderboard()">&#10005;</button>
+    <h2 class="modal-title">&#127942; Leaderboard</h2>
+
+    <div class="modal-tabs">
+      <button id="lb-tab-all" class="modal-tab active" onclick="lbFilter('all')">All Players</button>
+      <button id="lb-tab-me"  class="modal-tab"        onclick="lbFilter('me')">My Scores</button>
+    </div>
+
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Player</th>
+            <th>WPM</th>
+            <th>Accuracy</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody id="lb-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TOP NAV BAR
+══════════════════════════════════════ -->
+<div id="top-bar">
+  <!-- Guest buttons -->
+  <div id="auth-area">
+    <button class="btn btn-ghost" onclick="openAuthModal('login')">Login</button>
+    <button class="btn btn-red"   onclick="openAuthModal('register')">Register</button>
+  </div>
+  <!-- Logged-in user -->
+  <div id="user-area" style="display:none">
+    <span id="user-greeting" class="user-name"></span>
+    <button class="btn btn-ghost" onclick="openLeaderboard()">&#127942; Leaderboard</button>
+    <button class="btn btn-ghost" onclick="authLogout()">Sign Out</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════ -->
+<header>
+  <h1>Typo Disk</h1>
+  <p>Test your typing speed</p>
+</header>
+
+<div id="stats">
+  <div class="stat"><div class="stat-value" id="wpm-display">0</div><div class="stat-label">WPM</div></div>
+  <div class="stat"><div class="stat-value" id="acc-display">100%</div><div class="stat-label">Accuracy</div></div>
+  <div class="stat"><div class="stat-value" id="time-display">0s</div><div class="stat-label">Time</div></div>
+</div>
+
+<div id="level-badge">LEVEL 1 — BEGINNER</div>
+
+<div id="text-display"></div>
+
+<div id="input-area">
+  <input type="text" id="typing-input" placeholder="Click Start and begin typing…"
+    disabled autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+</div>
+
+<div id="action-row">
+  <button class="btn btn-red" id="start-btn" onclick="startGame()">Start</button>
+  <button class="btn btn-teal" id="share-score-btn" style="display:none"
+          onclick="triggerShareScore()">&#128257; Share Score</button>
+</div>
+
+<!-- Result -->
+<div id="result">
+  <h2>Level Complete!</h2>
+  <div class="big" id="result-wpm">-- WPM</div>
+  <p id="result-details"></p>
+  <button class="btn btn-teal" id="result-share-btn" style="margin-top:12px;display:none"
+          onclick="triggerShareScore()">&#127942; Share to Leaderboard</button>
+</div>
+
+<!-- Custom Lessons -->
+<div id="custom-section">
+  <button id="custom-toggle" onclick="toggleCustomPanel()">&#9658; Custom Lessons &#8212; Upload your own .txt file</button>
+  <div id="custom-panel">
+    <h3>Upload Custom Lesson</h3>
+    <div id="drop-zone" onclick="document.getElementById('file-input').click()"
+         ondragover="onDragOver(event)" ondragleave="onDragLeave(event)" ondrop="onDrop(event)">
+      <span>&#128196;</span>
+      Drop a .txt file here or click to browse
+    </div>
+    <input type="file" id="file-input" accept=".txt" style="display:none" onchange="onFileSelected(event)" />
+    <input type="text" id="lesson-name-input" placeholder="Lesson name (e.g. My Custom Lesson)" />
+    <div id="file-preview"></div>
+    <button class="btn btn-teal" id="add-lesson-btn" onclick="addCustomLesson()">Add Lesson</button>
+    <div id="lessons-list">
+      <h4>Custom Lessons</h4>
+      <div id="lessons-items"><p class="no-lessons">No custom lessons yet.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Keyboard -->
+<div id="keyboard">
+  <h3>Keyboard</h3>
+  <div class="kb-row">
+    <div class="key" id="key-backtick">`</div>
+    <div class="key" id="key-1">1</div><div class="key" id="key-2">2</div>
+    <div class="key" id="key-3">3</div><div class="key" id="key-4">4</div>
+    <div class="key" id="key-5">5</div><div class="key" id="key-6">6</div>
+    <div class="key" id="key-7">7</div><div class="key" id="key-8">8</div>
+    <div class="key" id="key-9">9</div><div class="key" id="key-0">0</div>
+    <div class="key" id="key-minus">-</div><div class="key" id="key-equal">=</div>
+    <div class="key w15" id="key-backspace">&#9003;</div>
+  </div>
+  <div class="kb-row">
+    <div class="key w15" id="key-tab">Tab</div>
+    <div class="key" id="key-q">q</div><div class="key" id="key-w">w</div>
+    <div class="key" id="key-e">e</div><div class="key" id="key-r">r</div>
+    <div class="key" id="key-t">t</div><div class="key" id="key-y">y</div>
+    <div class="key" id="key-u">u</div><div class="key" id="key-i">i</div>
+    <div class="key" id="key-o">o</div><div class="key" id="key-p">p</div>
+    <div class="key" id="key-bracketleft">[</div>
+    <div class="key" id="key-bracketright">]</div>
+    <div class="key w15" id="key-backslash">\</div>
+  </div>
+  <div class="kb-row">
+    <div class="key w17" id="key-caps">Caps</div>
+    <div class="key" id="key-a">a</div><div class="key" id="key-s">s</div>
+    <div class="key" id="key-d">d</div><div class="key" id="key-f">f</div>
+    <div class="key" id="key-g">g</div><div class="key" id="key-h">h</div>
+    <div class="key" id="key-j">j</div><div class="key" id="key-k">k</div>
+    <div class="key" id="key-l">l</div>
+    <div class="key" id="key-semicolon">;</div>
+    <div class="key" id="key-quote">'</div>
+    <div class="key w20" id="key-enter">Enter</div>
+  </div>
+  <div class="kb-row">
+    <div class="key w20" id="key-shift">Shift</div>
+    <div class="key" id="key-z">z</div><div class="key" id="key-x">x</div>
+    <div class="key" id="key-c">c</div><div class="key" id="key-v">v</div>
+    <div class="key" id="key-b">b</div><div class="key" id="key-n">n</div>
+    <div class="key" id="key-m">m</div>
+    <div class="key" id="key-comma">,</div>
+    <div class="key" id="key-period">.</div>
+    <div class="key" id="key-slash">/</div>
+    <div class="key w20" id="key-rshift">Shift</div>
+  </div>
+  <div class="kb-row">
+    <div class="key wsp" id="key-space">Space</div>
+  </div>
+</div>
+
+<script src="js/levels.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/leaderboard.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
