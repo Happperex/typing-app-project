@@ -4,7 +4,7 @@
 // ============================================
 
 // ── STATE ──
-let currentLevel  = 0;
+let currentDifficulty = "easy";
 let targetText    = "";
 let startTime     = null;
 let timerInterval = null;
@@ -13,7 +13,7 @@ let totalTyped    = 0;
 let isRunning     = false;
 let lastWPM       = 0;
 let lastAcc       = 100;
-let lastLevelName = "Level 1";
+let lastLevelName = "Easy";
 
 // ── KEY ID MAP (special keys) ──
 const KEY_MAP = {
@@ -36,9 +36,20 @@ const KEY_MAP = {
   "/"        : "key-slash"
 };
 
+// Escape HTML special chars so user text can't break markup
+function escapeHTML(ch) {
+  if (ch === "&") return "&amp;";
+  if (ch === "<") return "&lt;";
+  if (ch === ">") return "&gt;";
+  return ch;
+}
+
 // ── RENDER COLOURED TEXT ──
+// Uses real spaces (not &nbsp;) inside a white-space:pre-wrap container
+// so the browser wraps naturally at word boundaries — fixes the glitching.
 function renderText(typed) {
-  const display = document.getElementById("text-display");
+  const display = document.getElementById("text-display-inner") ||
+                   document.getElementById("text-display");
   let html = "";
   for (let i = 0; i < targetText.length; i++) {
     let cls = "char";
@@ -47,8 +58,7 @@ function renderText(typed) {
     } else if (i === typed.length) {
       cls += " cursor";
     }
-    const ch = targetText[i] === " " ? "&nbsp;" : targetText[i];
-    html += `<span class="${cls}">${ch}</span>`;
+    html += `<span class="${cls}">${escapeHTML(targetText[i])}</span>`;
   }
   display.innerHTML = html;
 }
@@ -105,17 +115,47 @@ function resetUI() {
   stopTimer();
 }
 
-// ── START BUILT-IN LEVEL ──
+// ── LEVEL SELECT SCREEN ──
+function selectDifficulty(diff) {
+  currentDifficulty = diff;
+  lastLevelName     = levels[diff].label;
+
+  document.getElementById("level-select").style.display = "none";
+  document.getElementById("game-screen").style.display   = "block";
+
+  document.getElementById("level-badge").textContent =
+    levels[diff].label.toUpperCase();
+  document.getElementById("level-badge").className = "badge-" + diff;
+
+  // Reset any custom-lesson override so Start uses the chosen difficulty
+  document.getElementById("start-btn").textContent = "Start";
+  document.getElementById("start-btn").onclick = startGame;
+
+  targetText = getRandomText(diff);
+  errors = 0; totalTyped = 0; isRunning = false;
+  document.getElementById("typing-input").disabled = true;
+  document.getElementById("result").style.display = "none";
+  renderText("");
+}
+
+function backToLevelSelect() {
+  isRunning = false;
+  stopTimer();
+  document.getElementById("game-screen").style.display   = "none";
+  document.getElementById("level-select").style.display  = "block";
+  document.getElementById("typing-input").disabled = true;
+}
+
+// ── START BUILT-IN LEVEL (uses current difficulty, picks a random text) ──
 function startGame() {
-  const lvl  = levels[currentLevel];
-  targetText    = lvl.text;
-  lastLevelName = lvl.name;
+  targetText    = getRandomText(currentDifficulty);
+  lastLevelName = levels[currentDifficulty].label;
   errors     = 0;
   totalTyped = 0;
   isRunning  = true;
 
   document.getElementById("level-badge").textContent =
-    `LEVEL ${lvl.number} \u2014 ${lvl.name.toUpperCase()}`;
+    levels[currentDifficulty].label.toUpperCase();
   document.getElementById("start-btn").textContent = "Restart";
   document.getElementById("start-btn").onclick = startGame;
 
@@ -271,6 +311,7 @@ function useCustomLesson(idx) {
 
   document.getElementById("level-badge").textContent =
     "CUSTOM \u2014 " + lesson.name.toUpperCase();
+  document.getElementById("level-badge").className = "";
   document.getElementById("start-btn").textContent = "Start";
 
   const inp = document.getElementById("typing-input");

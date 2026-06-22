@@ -101,15 +101,43 @@
   <p>Test your typing speed</p>
 </header>
 
+<!-- Level Select Screen -->
+<div id="level-select">
+  <h2 class="select-title">Choose Your Difficulty</h2>
+  <div class="diff-cards">
+    <div class="diff-card diff-easy" onclick="selectDifficulty('easy')">
+      <div class="diff-icon">&#127793;</div>
+      <div class="diff-name">Easy</div>
+      <div class="diff-desc">Short, simple words</div>
+    </div>
+    <div class="diff-card diff-medium" onclick="selectDifficulty('medium')">
+      <div class="diff-icon">&#9889;</div>
+      <div class="diff-name">Medium</div>
+      <div class="diff-desc">Longer sentences</div>
+    </div>
+    <div class="diff-card diff-hard" onclick="selectDifficulty('hard')">
+      <div class="diff-icon">&#128293;</div>
+      <div class="diff-name">Hard</div>
+      <div class="diff-desc">Complex vocabulary</div>
+    </div>
+  </div>
+</div>
+
+<!-- Game Screen (hidden until a difficulty is picked) -->
+<div id="game-screen" style="display:none">
+
 <div id="stats">
   <div class="stat"><div class="stat-value" id="wpm-display">0</div><div class="stat-label">WPM</div></div>
   <div class="stat"><div class="stat-value" id="acc-display">100%</div><div class="stat-label">Accuracy</div></div>
   <div class="stat"><div class="stat-value" id="time-display">0s</div><div class="stat-label">Time</div></div>
 </div>
 
-<div id="level-badge">LEVEL 1 — BEGINNER</div>
+<div id="level-badge-row">
+  <button class="btn btn-ghost btn-small" onclick="backToLevelSelect()">&#8592; Levels</button>
+  <div id="level-badge">EASY</div>
+</div>
 
-<div id="text-display"></div>
+<div id="text-display"><span id="text-display-inner"></span></div>
 
 <div id="input-area">
   <input type="text" id="typing-input" placeholder="Click Start and begin typing…"
@@ -202,6 +230,8 @@
     <div class="key wsp" id="key-space">Space</div>
   </div>
 </div>
+
+</div><!-- /game-screen -->
 
 <script src="js/levels.js"></script>
 <script src="js/auth.js"></script>

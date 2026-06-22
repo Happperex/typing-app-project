@@ -66,19 +66,71 @@ header p { color: #888; font-size: 0.85rem; margin-top: 4px; }
 #level-badge {
   background: #16213e; border: 1px solid #e94560; color: #e94560;
   padding: 4px 16px; border-radius: 20px; font-size: 0.8rem;
-  letter-spacing: 2px; margin-bottom: 16px;
+  letter-spacing: 2px;
 }
+#level-badge.badge-easy   { border-color: #4ecca3; color: #4ecca3; }
+#level-badge.badge-medium { border-color: #f5a623; color: #f5a623; }
+#level-badge.badge-hard   { border-color: #e94560; color: #e94560; }
 
 /* ── Text Display ── */
 #text-display {
   background: #16213e; border: 1px solid #0f3460; border-radius: 10px;
   padding: 22px; width: 100%; max-width: 700px; font-size: 1.15rem;
-  line-height: 2; margin-bottom: 14px; min-height: 85px; letter-spacing: 0.5px;
+  line-height: 1.9; margin-bottom: 14px; min-height: 90px;
+  letter-spacing: 0.5px; word-wrap: break-word; white-space: pre-wrap;
+  overflow-wrap: break-word;
 }
-.char         { color: #555; }
+.char {
+  color: #555;
+  white-space: pre-wrap;
+}
 .char.correct { color: #4ecca3; }
 .char.wrong   { color: #e94560; background: #3a0a14; border-radius: 2px; }
-.char.cursor  { border-left: 2px solid #e94560; }
+.char.cursor  {
+  border-left: 2px solid #e94560;
+  animation: blink-cursor 1s step-end infinite;
+}
+@keyframes blink-cursor {
+  0%, 100% { border-left-color: #e94560; }
+  50%      { border-left-color: transparent; }
+}
+
+/* ── Level Select Screen ── */
+#level-select {
+  width: 100%; max-width: 700px; text-align: center; margin-top: 10px;
+}
+.select-title {
+  color: #eee; font-size: 1.3rem; letter-spacing: 2px;
+  margin-bottom: 24px; text-transform: uppercase;
+}
+.diff-cards {
+  display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+}
+.diff-card {
+  background: #16213e; border: 1px solid #0f3460; border-radius: 12px;
+  padding: 28px 24px; width: 180px; cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s;
+}
+.diff-card:hover { transform: translateY(-4px); }
+.diff-icon { font-size: 2.2rem; margin-bottom: 10px; }
+.diff-name {
+  font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.diff-desc { font-size: 0.78rem; color: #888; }
+
+.diff-easy:hover   { border-color: #4ecca3; }
+.diff-easy .diff-name   { color: #4ecca3; }
+.diff-medium:hover { border-color: #f5a623; }
+.diff-medium .diff-name { color: #f5a623; }
+.diff-hard:hover   { border-color: #e94560; }
+.diff-hard .diff-name   { color: #e94560; }
+
+/* ── Level badge row (with back button) ── */
+#level-badge-row {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+}
+.btn-small { padding: 5px 14px; font-size: 0.78rem; }
 
 /* ── Typing Input ── */
 #input-area { width: 100%; max-width: 700px; margin-bottom: 14px; }
